@@ -5,6 +5,7 @@ from sqlalchemy.orm import Session
 from app.db import models
 from app.repository import user
 from typing import List
+from app.oauth import get_current_user
 
 root_path = '/users'
 
@@ -15,7 +16,7 @@ router = APIRouter(
 
 
 @router.get('', response_model=List[ResponseUser], status_code=status.HTTP_200_OK)
-def get_all_users(db: Session = Depends(get_db)):
+def get_all_users(db: Session = Depends(get_db), current_user: User = Depends(get_current_user)):
     data = db.query(models.User).all()
     return data
 
